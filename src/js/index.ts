@@ -1,12 +1,35 @@
-interface Person {
-    firstName: string;
-    lastName: string;
+import axios, {
+    AxiosResponse,
+    AxiosError
+} from "../../node_modules/axios/index";
+
+interface Car {
+    id: number;
+    vendor: string;
+    model: string;
+    price: number;
 }
 
-function greeter(person: Person): string {
-    return "Hello, " + person.firstName + " " + person.lastName;
-}
-let user: Person = { firstName: "John", lastName: "Doe" };
+let weburl: string = "https://webapicar20190326034339.azurewebsites.net/api/cars";
+document.getElementById("ShowCars").addEventListener("click", GetAllCars);
+let carList: HTMLUListElement = <HTMLUListElement> document.createElement("ul");
 
-let element: HTMLDivElement = <HTMLDivElement> document.getElementById("content");
-element.innerHTML = greeter(user);
+function GetAllCars(){
+    axios.get(weburl)
+    .then(function(response){
+        carList.innerHTML = "";
+        carList = <HTMLUListElement> document.createElement("ul");
+        response.data.forEach((element: Car) => {
+            let car = document.createElement("li");
+            car.setAttribute("id", element.id.toString());
+            car.innerHTML = (element.id + ": " + element.vendor + ", " + element.model + " (Costs: " + element.price + ")");
+            carList.appendChild(car);
+        });
+        carList.setAttribute("id", "CarsList");
+        document.getElementById("placedData").appendChild(carList);
+        console.log(response.status);
+    })
+    .catch(function(error){
+        console.log(error);
+    });
+}
