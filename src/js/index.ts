@@ -15,6 +15,7 @@ document.getElementById("ShowCars").addEventListener("click", GetAllCars);
 document.getElementById("getByVendorButton").addEventListener("click", GetAllByVendor)
 document.getElementById("getByVendorPriceButton").addEventListener("click", GetAllByVendorAndPrice)
 document.getElementById("addNewCarButton").addEventListener("click", AddNewCar)
+document.getElementById("DeleteCarButton").addEventListener("click", DeleteCar)
 let carList: HTMLUListElement = <HTMLUListElement> document.createElement("ul");
 
 
@@ -95,4 +96,14 @@ function AddNewCar(){
         })
         .catch();
     }
+}
+
+function DeleteCar(){
+    let Id: number = parseFloat((<HTMLInputElement> document.getElementById("DeleteCarID")).value);
+
+    axios.delete(weburl + "/deleteById/" + Id)
+    .then(function(response){
+        GetAllCars();
+    })
+    .catch()
 }
