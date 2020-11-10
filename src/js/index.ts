@@ -16,6 +16,7 @@ document.getElementById("getByVendorButton").addEventListener("click", GetAllByV
 document.getElementById("getByVendorPriceButton").addEventListener("click", GetAllByVendorAndPrice)
 document.getElementById("addNewCarButton").addEventListener("click", AddNewCar)
 document.getElementById("DeleteCarButton").addEventListener("click", DeleteCar)
+document.getElementById("UpdateCarButton").addEventListener("click", UpdateCar)
 let carList: HTMLUListElement = <HTMLUListElement> document.createElement("ul");
 
 
@@ -106,4 +107,21 @@ function DeleteCar(){
         GetAllCars();
     })
     .catch()
+}
+
+function UpdateCar(){
+    let Id: number = parseFloat((<HTMLInputElement> document.getElementById("UpdateCarID")).value);
+    let vendor = (<HTMLInputElement> document.getElementById("UpdateCarVendor")).value;
+    let model = (<HTMLInputElement> document.getElementById("UpdateCarModel")).value;
+    let price: number = parseFloat((<HTMLInputElement> document.getElementById("UpdateCarPrice")).value);
+
+   
+    
+    if (vendor != null && model != null && price != null){
+        axios.put<Car>(weburl + "/" + Id,  {Id: Id, Vendor: vendor,  Model: model, Price: price})
+        .then(function(repsonse){
+            GetAllCars();
+        })
+        .catch();
+    }
 }
