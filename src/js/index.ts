@@ -10,10 +10,11 @@ interface Car {
     price: number;
 }
 
-let weburl: string = "http://localhost:54180/api/cars";
+let weburl: string = "https://localhost:44313/api/cars";
 document.getElementById("ShowCars").addEventListener("click", GetAllCars);
 document.getElementById("getByVendorButton").addEventListener("click", GetAllByVendor)
 document.getElementById("getByVendorPriceButton").addEventListener("click", GetAllByVendorAndPrice)
+document.getElementById("addNewCarButton").addEventListener("click", AddNewCar)
 let carList: HTMLUListElement = <HTMLUListElement> document.createElement("ul");
 
 
@@ -78,4 +79,20 @@ function GetAllByVendorAndPrice(){
     .catch(function(error){
         console.log(error);
     });
+}
+
+function AddNewCar(){
+    let vendor = (<HTMLInputElement> document.getElementById("addNewCarVendor")).value;
+    let model = (<HTMLInputElement> document.getElementById("addNewCarModel")).value;
+    let price: number = parseFloat((<HTMLInputElement> document.getElementById("addNewCarPrice")).value);
+
+   
+    
+    if (vendor != null && model != null && price != null){
+        axios.post<Car>(weburl,  {Vendor: vendor,  Model: model, Price: price})
+        .then(function(repsonse){
+            GetAllCars();
+        })
+        .catch();
+    }
 }
