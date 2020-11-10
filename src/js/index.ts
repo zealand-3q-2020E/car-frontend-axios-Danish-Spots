@@ -10,9 +10,11 @@ interface Car {
     price: number;
 }
 
-let weburl: string = "https://webapicar20190326034339.azurewebsites.net/api/cars";
+let weburl: string = "http://localhost:54180/api/cars";
 document.getElementById("ShowCars").addEventListener("click", GetAllCars);
+document.getElementById("getByVendorButton").addEventListener("click", GetAllByVendor)
 let carList: HTMLUListElement = <HTMLUListElement> document.createElement("ul");
+let inputField: HTMLInputElement = <HTMLInputElement> document.getElementById("getByVendorVendorField");
 
 function GetAllCars(){
     axios.get(weburl)
@@ -28,6 +30,27 @@ function GetAllCars(){
         carList.setAttribute("id", "CarsList");
         document.getElementById("placedData").appendChild(carList);
         console.log(response.status);
+    })
+    .catch(function(error){
+        console.log(error);
+    });
+}
+
+function GetAllByVendor(){
+    
+    axios.get(weburl + "/byVendor/" + inputField.value)
+    .then(function(response){
+        carList.innerHTML = "";
+        carList = <HTMLUListElement> document.createElement("ul");
+        response.data.forEach((element: Car) => {
+            let car = document.createElement("li");
+            car.setAttribute("id", element.id.toString());
+            car.innerHTML = (element.id + ": " + element.vendor + ", " + element.model + " (Costs: " + element.price + ")");
+            carList.appendChild(car);
+        });
+        carList.setAttribute("id", "CarsList");
+        document.getElementById("getByVendorData").appendChild(carList);
+        console.log(response);
     })
     .catch(function(error){
         console.log(error);
